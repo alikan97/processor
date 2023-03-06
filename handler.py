@@ -1,8 +1,8 @@
 import pandas as pd
-from bollinger import get_bollinger_bands
-from ema import get_ema
-from support_resistance import get_support_resistance
-from rsi import get_rsi, rsi_signals
+from functions.bollinger import get_bollinger_bands
+from functions.ema import get_ema
+from functions.support_resistance import get_support_resistance
+from functions.rsi import get_rsi, rsi_signals
 
 def handler(event, context):
     allCoins = parseSymbols(event)

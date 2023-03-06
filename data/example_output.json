@@ -1,0 +1,18 @@
+[
+    {
+        "timestamp": 1677487426014,
+        "symbol": "ETHBTC",
+        "close": "0.06991600",
+        "open": "0.06908000",
+        "high": "0.07000000",
+        "low": "0.06893400",
+        "bollinger_up": "0.072224354",
+        "bollinger_down": "0.065224354",
+        "support": "0.123124234",
+        "resistance": "0.24234235",
+        "rsi": "0.2193450349",
+        "buy_signal": "0.52345923",
+        "sell_signal": "0.2355163",
+        "exponential_moving_avg": "0.1243235234"
+    } // ....
+]
