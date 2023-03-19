@@ -6,6 +6,8 @@ from functions.rsi import get_rsi, rsi_signals
 from logger import send_log, Log_Level
 
 def handler(event, context):
+    print("\n\n GETTING EVENT DATA \n\n")
+    print(event)
     allCoins = parseSymbols(event)
 
     try:
@@ -22,7 +24,6 @@ def handler(event, context):
         
         return pd.concat(allCoins).to_json()
         # Maybe send to splunk directly here
-
         # Or send to another Lambda to send to Splunk ??
 
     except Exception as e:
