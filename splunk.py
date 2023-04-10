@@ -27,3 +27,10 @@ def send_log(level: Log_Level, message):
                              data=json.dumps(event, ensure_ascii=False).encode('utf-8'))
     
     return response
+
+def send_data(data):
+    response = requests.post(HOST+RAW_URI,
+                             headers={"Authorization": f'Splunk {API_KEY}'},
+                             data=json.dumps(data, ensure_ascii=False).encode('utf-8'))
+    
+    return response

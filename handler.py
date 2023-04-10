@@ -3,33 +3,7 @@ from functions.bollinger import get_bollinger_bands
 from functions.ema import get_ema
 from functions.support_resistance import get_support_resistance
 from functions.rsi import get_rsi, rsi_signals
-from logger import send_log, Log_Level
-
-def handler(event, context):
-    print("\n\n GETTING EVENT DATA \n\n")
-    print(event)
-    allCoins = parseSymbols(event)
-
-    try:
-        for i in allCoins:
-            i['bollinger_up'], i['bollinger_down'] = get_bollinger_bands(i['close'])
-            i['exponential_moving_avg'] = get_ema(i['close'])
-            i['support'], i['resistance'] = get_support_resistance(i['close'])
-            rsi = get_rsi(i['close'])
-            i['rsi'] = rsi
-            buy, sell, _sigs = rsi_signals(i['close'], rsi)
-            
-            i['buy_signal'] = buy
-            i['sell_signal'] = sell
-        
-        return pd.concat(allCoins).to_json()
-        # Maybe send to splunk directly here
-        # Or send to another Lambda to send to Splunk ??
-
-    except Exception as e:
-        send_log(Log_Level.ERROR, f'Error occured: {e}')
-        return None
-
+from splunk import send_log, Log_Level
 
 def parseSymbols(data):
     eth = data[data['symbol'] == 'ETHBTC']
@@ -48,3 +22,36 @@ def parseSymbols(data):
     bnb.reset_index(drop=True, inplace=True)
 
     return eth, matic, xrp, ltc, neo, algo, bnb
+
+def handler(event, context):
+    print("\n\n GETTING EVENT DATA \n\n")
+    allCoins = parseSymbols(event)
+
+    try:
+        for i in allCoins:  
+            # review dataframe sizes and match
+            up, down = get_bollinger_bands(i['close'])
+            i.loc['bollinger_up'] = up
+            i.loc['bollinger_down'] = down 
+            i.loc['exponential_moving_avg'] = get_ema(i['close'])
+            support, resistance = get_support_resistance(i['close'])
+            i.loc['support'] = support
+            i.loc['resistance'] = resistance
+            rsi = get_rsi(i['close'])
+            i.loc['rsi'] = rsi
+            buy, sell, _sigs = rsi_signals(i['close'], rsi)
+            
+            i.loc['buy_signal'] = buy
+            i.loc['sell_signal'] = sell
+
+        # Maybe send to splunk directly here
+        # Or send to another Lambda to send to Splunk ??
+
+    except Exception as e:
+        send_log(Log_Level.ERROR, f'Error occured: {e}')
+
+
+if __name__ == "__main__":
+    df = pd.read_json('./data/example_input.json')
+
+    handler(df, None)

@@ -1,5 +1,4 @@
 import numpy as np
-from sma import get_sma
 
 def get_bollinger_bands(data, rate=2):
     """
@@ -14,3 +13,12 @@ def get_bollinger_bands(data, rate=2):
     lower = sma - std * 2 # Calculate bottom band
 
     return upper, lower
+
+def get_sma(data, rate=2):
+    """
+    Get simple moving average
+    :param list data: List of close prices for instrument
+    :param list data: Window sampling rate
+    :return: mean value
+    """
+    return data.rolling(rate).mean()
