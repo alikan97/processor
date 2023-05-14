@@ -21,7 +21,7 @@ class Log_Level():
 
 def send_log(level: Log_Level, message):
     event = {
-        'timestamp': datetime.datetime.now(),
+        'timestamp': str(datetime.datetime.now()),
         'level': level,
         'message': message
     }
