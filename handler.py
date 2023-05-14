@@ -3,7 +3,7 @@ from functions.bollinger import get_bollinger_bands
 from functions.ema import get_ema
 from functions.support_resistance import get_support_resistance
 from functions.rsi import get_rsi, rsi_signals
-from splunk import send_log, Log_Level
+from splunk import send_log, send_data, Log_Level
 
 def parseSymbols(data):
     eth = data[data['symbol'] == 'ETHBTC']
@@ -24,12 +24,10 @@ def parseSymbols(data):
     return eth, matic, xrp, ltc, neo, algo, bnb
 
 def handler(event, context):
-    print("\n\n GETTING EVENT DATA \n\n")
     allCoins = parseSymbols(event)
 
     try:
         for i in allCoins:  
-            # review dataframe sizes and match
             up, down = get_bollinger_bands(i['close'])
             i.loc['bollinger_up'] = up
             i.loc['bollinger_down'] = down 
@@ -43,13 +41,12 @@ def handler(event, context):
             
             i.loc['buy_signal'] = buy
             i.loc['sell_signal'] = sell
-
-        # Maybe send to splunk directly here
-        # Or send to another Lambda to send to Splunk ??
+        for coin in allCoins:
+            send_data(coin.to_json())
+            
 
     except Exception as e:
         send_log(Log_Level.ERROR, f'Error occured: {e}')
-
 
 if __name__ == "__main__":
     df = pd.read_json('./data/example_input.json')

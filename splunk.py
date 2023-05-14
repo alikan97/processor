@@ -2,12 +2,15 @@ import datetime
 import requests
 import json
 import os
+from secretmanager import CachedSecretsManager
 
-HOST = os.environ.get('SPLUNK_HOST')
+cachedSecretsClient = CachedSecretsManager()
+
+HOST = cachedSecretsClient.getInstance().get_secret_string('SPLUNK_HOST')
+API_KEY = cachedSecretsClient.getInstance().get_secret_string('SPLUNK_API_KEY')
+PORT = cachedSecretsClient.getInstance().get_secret_string('SPLUNK_PORT')
 LOG_URI = "/services/collector/event"
 RAW_URI = "/services/collector/raw" # Used for raw data indexing, searcing & Visualising
-API_KEY = os.environ.get('SPLUNK_API_KEY')
-PORT = os.environ.get('SPLUNK_PORT')
 
 class Log_Level():
     SUCCESS = 1
