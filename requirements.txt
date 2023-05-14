@@ -3,5 +3,5 @@ pandas
 scipy
 scikit-learn
 requests
-aws_secretsmanager_caching
+aws-secretsmanager-caching
 boto3
