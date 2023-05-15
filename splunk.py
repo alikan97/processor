@@ -21,7 +21,7 @@ class Log_Level():
 
 def send_log(level: Log_Level, message):
     event = {
-        'timestamp': str(datetime.datetime.now()),
+        'sourcetype': 'json',
         'level': level,
         'message': message
     }
