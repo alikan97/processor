@@ -24,7 +24,7 @@ def parseSymbols(data):
     return eth, matic, xrp, ltc, neo, algo, bnb
 
 def handler(event, context):
-    allCoins = parseSymbols(event)
+    allCoins = parseSymbols(event['data'])
 
     try:
         for i in allCoins:  
