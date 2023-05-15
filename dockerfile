@@ -1,9 +1,8 @@
 FROM public.ecr.aws/lambda/python:3.7
 
-WORKDIR /
+WORKDIR ./
 
-COPY splunk.py ./
-COPY handler.py ./
+COPY splunk.py handler.py ./
 ADD functions/ ./
 
 COPY requirements.txt .
