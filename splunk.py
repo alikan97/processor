@@ -6,7 +6,7 @@ from secretmanager import CachedSecretsManager
 cachedSecretsClient = CachedSecretsManager()
 Splunk_credentials = json.loads(cachedSecretsClient.getInstance().get_secret_string('dev/splunk'))
 
-HOST = Splunk_credentials['SPLUNK_HOST']
+HOST = "http://" + Splunk_credentials['SPLUNK_HOST']
 API_KEY = Splunk_credentials['SPLUNK_API_KEY']
 PORT = Splunk_credentials['SPLUNK_PORT']
 
@@ -26,14 +26,14 @@ def send_log(level: Log_Level, message):
         'message': message
     }
 
-    response = requests.post(HOST+LOG_URI,
+    response = requests.post(HOST + ":" + PORT + LOG_URI,
                              headers={"Authorization": f'Splunk {API_KEY}'},
                              data=json.dumps(event, ensure_ascii=False).encode('utf-8'))
     
     return response
 
 def send_data(data):
-    response = requests.post(HOST+RAW_URI,
+    response = requests.post(HOST + ":" + PORT + RAW_URI,
                              headers={"Authorization": f'Splunk {API_KEY}'},
                              data=json.dumps(data, ensure_ascii=False).encode('utf-8'))
     
