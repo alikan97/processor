@@ -22,6 +22,7 @@ class Log_Level():
 def send_log(level: Log_Level, message):
     event = {
         'sourcetype': 'json',
+        'index': 'main',
         'level': level,
         'message': message
     }
