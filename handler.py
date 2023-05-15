@@ -47,8 +47,3 @@ def handler(event, context):
 
     except Exception as e:
         send_log(Log_Level.ERROR, f'Error occured: {e}')
-
-if __name__ == "__main__":
-    df = pd.read_json('./data/example_input.json')
-
-    handler(df, None)
