@@ -4,6 +4,6 @@ COPY requirements.txt .
 RUN pip install -r requirements.txt
 
 COPY splunk.py handler.py ./
-COPY functions/ ./
+ADD functions/ ./
 
 CMD [ "handler.handler" ]
